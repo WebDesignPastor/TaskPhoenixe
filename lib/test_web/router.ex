@@ -21,9 +21,19 @@ defmodule TestWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", TestWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", TestWeb do
+    pipe_through :api
+    resources "/users", UserController, except: [:new, :edit]
+
+    scope "/tasks" do
+      get "/", TaskController, :index
+      get "/:id", TaskController, :show
+      post "/:id", TaskController, :create
+      delete "/:id", TaskController, :delete
+      put "/:id", TaskController, :update
+      get "/users/:id", UserController, :show
+    end
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:test, :dev_routes) do
